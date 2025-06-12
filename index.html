@@ -207,19 +207,20 @@
 
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Thu nhỏ kích thước ô */
             gap: 15px;
             margin-top: 20px;
         }
 
         .achievement-card {
             background: white;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 15px; /* Giảm padding */
+            border-radius: 12px; /* Giảm bán kính bo góc */
             text-align: center;
             box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
             transition: transform 0.3s ease;
             border: 2px solid #ffe0e6;
+            height: 180px; /* Thu nhỏ chiều cao */
         }
 
         .achievement-card:hover {
@@ -227,19 +228,20 @@
         }
 
         .achievement-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 1.8em; /* Giảm kích thước icon */
+            margin-bottom: 8px; /* Giảm khoảng cách */
         }
 
         .achievement-title {
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
+            font-size: 0.9em; /* Giảm kích thước chữ */
         }
 
         .achievement-desc {
             color: #666;
-            font-size: 0.9em;
+            font-size: 0.8em; /* Giảm kích thước chữ */
         }
 
         .earned {
@@ -327,6 +329,29 @@
         .input-group input:focus {
             outline: none;
             border-color: #ff6b9d;
+        }
+
+        .note-section {
+            padding: 30px;
+            background: #fef7f7;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ffe0e6;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .random-note {
+            margin-top: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #ffe0e6;
+            color: #333;
         }
 
         @keyframes slideIn {
@@ -472,6 +497,13 @@
             <h2 class="section-title">🏆 Thành tựu</h2>
             <div class="achievements-grid" id="achievementsGrid"></div>
         </div>
+
+        <div class="note-section">
+            <h2 class="section-title">📝 Ghi chú học tập</h2>
+            <textarea class="note-input" id="noteInput" placeholder="Nhập từ vựng, ngữ pháp, cụm từ hay..."></textarea>
+            <button class="btn" onclick="saveNote()">Lưu ghi chú</button>
+            <div class="random-note" id="randomNote"></div>
+        </div>
     </div>
 
     <div id="bookModal" class="modal">
@@ -503,7 +535,8 @@
             },
             dailyTasks: {},
             achievements: [],
-            lastStudyDate: null
+            lastStudyDate: null,
+            notes: []
         };
 
         let currentBook = '';
@@ -516,44 +549,43 @@
             { id: 'month1', icon: '📅', title: 'Bền bỉ', desc: 'Đạt 50 giờ học tổng cộng', points: 200 }
         ];
 
-        // Daily tasks based on schedule
         const dailyTasksByPhase = {
-            1: { // Giai đoạn 1: Nền tảng (Tháng 1-2, nhưng bắt đầu từ 6/2025)
+            1: { // Giai đoạn 1: Nền tảng
                 weekday: {
-                    2: [ // Thứ 2
+                    2: [
                         { text: 'Grammar study (20p)', time: '20p', points: 10 },
                         { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
                         { text: 'Games/Apps (20p)', time: '20p', points: 5 }
                     ],
-                    3: [ // Thứ 3
+                    3: [
                         { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
                         { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
                     ],
-                    4: [ // Thứ 4
+                    4: [
                         { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
                         { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
                     ],
-                    5: [ // Thứ 5
+                    5: [
                         { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
                         { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
                     ],
-                    6: [ // Thứ 6
+                    6: [
                         { text: 'Grammar study (20p)', time: '20p', points: 10 },
                         { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
                         { text: 'Games/Apps (20p)', time: '20p', points: 5 }
                     ]
                 },
                 weekend: {
-                    6: [ // Thứ 7
+                    6: [
                         { text: 'Mini practice test or review (1h)', time: '1h', points: 20 },
                         { text: 'Fun activity (movie, games, YouTube) (1h)', time: '1h', points: 10 }
                     ],
-                    0: [ // Chủ nhật
+                    0: [
                         { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
                     ]
                 }
             },
-            2: { // Giai đoạn 2: Phát triển (Tháng 3-4)
+            2: { // Giai đoạn 2: Phát triển
                 weekday: {
                     2: [
                         { text: 'Grammar study (30p)', time: '30p', points: 15 },
@@ -589,7 +621,7 @@
                     ]
                 }
             },
-            3: { // Giai đoạn 3: Tăng cường (Tháng 5-6)
+            3: { // Giai đoạn 3: Tăng cường
                 weekday: {
                     2: [
                         { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
@@ -630,7 +662,7 @@
                     ]
                 }
             },
-            4: { // Giai đoạn 4: Hoàn thiện (Tháng 7-8)
+            4: { // Giai đoạn 4: Hoàn thiện
                 weekday: {
                     2: [
                         { text: 'IELTS practice (1h)', time: '1h', points: 25 },
@@ -674,6 +706,7 @@
             updateDisplay();
             generateDailyTasks();
             updateStreak();
+            showRandomNote();
         }
 
         function loadData() {
@@ -733,19 +766,16 @@
         }
 
         function generateDailyTasks() {
-            const today = new Date('2025-06-12'); // Set to current date: 12/6/2025 (Thursday)
-            const dayOfWeek = today.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
-            const month = today.getMonth() + 1; // Tháng 1-12
-
-            // Xác định giai đoạn là 1 vì bạn bắt đầu từ tháng 6/2025
+            const today = new Date('2025-06-12');
+            const dayOfWeek = today.getDay();
             let phase = 1;
 
             let tasks = [];
-            if (dayOfWeek >= 1 && dayOfWeek <= 5) { // T2-T6
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
                 tasks = dailyTasksByPhase[phase].weekday[dayOfWeek] || [];
-            } else if (dayOfWeek === 6) { // Thứ 7
+            } else if (dayOfWeek === 6) {
                 tasks = dailyTasksByPhase[phase].weekend[6] || [];
-            } else if (dayOfWeek === 0) { // Chủ nhật
+            } else if (dayOfWeek === 0) {
                 tasks = dailyTasksByPhase[phase].weekend[0] || [];
             }
 
@@ -901,6 +931,27 @@
                 checkAchievements();
                 closeModal();
                 showNotification(`📚 Đã cập nhật tiến độ sách!`);
+            }
+        }
+
+        function saveNote() {
+            const note = document.getElementById('noteInput').value.trim();
+            if (note) {
+                data.notes.push(note);
+                document.getElementById('noteInput').value = '';
+                saveData();
+                showRandomNote();
+                showNotification('📝 Ghi chú đã được lưu!');
+            }
+        }
+
+        function showRandomNote() {
+            const randomNoteElement = document.getElementById('randomNote');
+            if (data.notes.length > 0) {
+                const randomIndex = Math.floor(Math.random() * data.notes.length);
+                randomNoteElement.textContent = `Ghi chú ngẫu nhiên hôm nay: ${data.notes[randomIndex]}`;
+            } else {
+                randomNoteElement.textContent = 'Chưa có ghi chú nào. Hãy thêm ghi chú để xem!';
             }
         }
 
