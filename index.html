@@ -110,7 +110,7 @@
             transform: translate(-50%, -50%);
             color: #333;
             font-weight: bold;
-            font-size: 0.8em;
+            font-size: 0.9em;
         }
 
         .daily-tracker {
@@ -207,20 +207,20 @@
 
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Thu nhỏ kích thước ô */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
 
         .achievement-card {
             background: white;
-            padding: 15px; /* Giảm padding */
-            border-radius: 12px; /* Giảm bán kính bo góc */
+            padding: 15px;
+            border-radius: 12px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
             transition: transform 0.3s ease;
             border: 2px solid #ffe0e6;
-            height: 180px; /* Thu nhỏ chiều cao */
+            height: 180px;
         }
 
         .achievement-card:hover {
@@ -228,20 +228,20 @@
         }
 
         .achievement-icon {
-            font-size: 1.8em; /* Giảm kích thước icon */
-            margin-bottom: 8px; /* Giảm khoảng cách */
+            font-size: 1.8em;
+            margin-bottom: 8px;
         }
 
         .achievement-title {
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
-            font-size: 0.9em; /* Giảm kích thước chữ */
+            font-size: 0.9em;
         }
 
         .achievement-desc {
             color: #666;
-            font-size: 0.8em; /* Giảm kích thước chữ */
+            font-size: 0.8em;
         }
 
         .earned {
@@ -352,6 +352,17 @@
             border-radius: 8px;
             border: 2px solid #ffe0e6;
             color: #333;
+        }
+
+        .random-note-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .random-note-content {
+            text-align: center;
         }
 
         @keyframes slideIn {
@@ -502,7 +513,10 @@
             <h2 class="section-title">📝 Ghi chú học tập</h2>
             <textarea class="note-input" id="noteInput" placeholder="Nhập từ vựng, ngữ pháp, cụm từ hay..."></textarea>
             <button class="btn" onclick="saveNote()">Lưu ghi chú</button>
-            <div class="random-note" id="randomNote"></div>
+            <div class="random-note">
+                <div class="random-note-title">✽ word of the day ✽</div>
+                <div class="random-note-content" id="randomNoteContent"></div>
+            </div>
         </div>
     </div>
 
@@ -946,12 +960,20 @@
         }
 
         function showRandomNote() {
-            const randomNoteElement = document.getElementById('randomNote');
+            const randomNoteContent = document.getElementById('randomNoteContent');
             if (data.notes.length > 0) {
-                const randomIndex = Math.floor(Math.random() * data.notes.length);
-                randomNoteElement.textContent = `Ghi chú ngẫu nhiên hôm nay: ${data.notes[randomIndex]}`;
+                const today = new Date('2025-06-12').toDateString();
+                let randomIndex;
+                if (!localStorage.getItem('lastRandomNoteDate') || localStorage.getItem('lastRandomNoteDate') !== today) {
+                    randomIndex = Math.floor(Math.random() * data.notes.length);
+                    localStorage.setItem('lastRandomNoteDate', today);
+                    localStorage.setItem('lastRandomNoteIndex', randomIndex);
+                } else {
+                    randomIndex = parseInt(localStorage.getItem('lastRandomNoteIndex'));
+                }
+                randomNoteContent.textContent = data.notes[randomIndex];
             } else {
-                randomNoteElement.textContent = 'Chưa có ghi chú nào. Hãy thêm ghi chú để xem!';
+                randomNoteContent.textContent = 'Chưa có ghi chú nào. Hãy thêm ghi chú để xem!';
             }
         }
 
