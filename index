@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Progress Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd1e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #fef7f7;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 2px solid #ffe0e6;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .progress-section {
+            padding: 30px;
+            background: #fefefe;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            background: #ffe0e6;
+            height: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9a9e, #fecfef);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .daily-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+            border: 2px solid #ffe0e6;
+        }
+
+        .day-header {
+            font-weight: bold;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fef7f7;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: #ffe0e6;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #ff6b9d;
+        }
+
+        .task-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .task-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .books-section {
+            background: #fef7f7;
+            padding: 30px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .book-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+            border: 2px solid #ffe0e6;
+        }
+
+        .book-title {
+            font-weight: bold;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .achievement-section {
+            background: linear-gradient(135deg, #ffe0e6 0%, #fecfef 100%);
+            padding: 30px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+            transition: transform 0.3s ease;
+            border: 2px solid #ffe0e6;
+        }
+
+        .achievement-card:hover {
+            transform: scale(1.05);
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .earned {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            border-color: #ff6b9d;
+        }
+
+        .earned .achievement-title,
+        .earned .achievement-desc {
+            color: white;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 155, 158, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #ffe0e6;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ff6b9d;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff6b9d;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffe0e6;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .daily-tracker {
+                grid-template-columns: 1fr;
+            }
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 IELTS Progress Tracker</h1>
+            <p>Hành trình chinh phục IELTS 6.0 của bạn</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPoints">0</div>
+                <div class="stat-label">Điểm tích lũy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="studyStreak">0</div>
+                <div class="stat-label">Streak (ngày)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalHours">0</div>
+                <div class="stat-label">Tổng giờ học</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="daysLeft">180</div>
+                <div class="stat-label">Ngày còn lại</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <h2 class="section-title">📊 Tiến độ tổng quan</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress" style="width: 5%"></div>
+                <div class="progress-text">5% hoàn thành</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <h2 class="section-title">📅 Lịch học hôm nay</h2>
+            <div class="daily-tracker" id="dailyTasks"></div>
+        </div>
+
+        <div class="books-section">
+            <h2 class="section-title">📚 Tiến độ sách</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <div class="book-title">Grammar in Use</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="grammarProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/120 units</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('grammar')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">Vocabulary in Use</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="vocabProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/60 units</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('vocab')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">Pronunciation in Use</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="pronunProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/50 units</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('pronun')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">IELTS Reading A2+</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="readingBookProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/12 lessons</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('readingBook')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">IELTS Listening A2+</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="listeningProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/12 lessons</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('listening')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">IELTS Speaking A2+</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="speakingProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/12 lessons</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('speaking')">Cập nhật</button>
+                </div>
+                <div class="book-card">
+                    <div class="book-title">IELTS Writing A2+</div>
+                    <div class="book-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="writingProgress" style="width: 0%"></div>
+                            <div class="progress-text">0/12 lessons</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateBookProgress('writing')">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="achievement-section">
+            <h2 class="section-title">🏆 Thành tựu</h2>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+    </div>
+
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2 id="bookModalTitle">📚 Cập nhật tiến độ sách</h2>
+            <div class="input-group">
+                <label for="unitsCompleted">Số units/lessons đã hoàn thành:</label>
+                <input type="number" id="unitsCompleted" min="0" placeholder="0">
+            </div>
+            <button class="btn" onclick="saveBookProgress()">💾 Lưu tiến độ</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            totalPoints: 0,
+            studyStreak: 0,
+            totalHours: 0,
+            overallProgress: 5,
+            books: {
+                grammar: { completed: 0, total: 120 },
+                vocab: { completed: 0, total: 60 },
+                pronun: { completed: 0, total: 50 },
+                readingBook: { completed: 0, total: 12 },
+                listening: { completed: 0, total: 12 },
+                speaking: { completed: 0, total: 12 },
+                writing: { completed: 0, total: 12 }
+            },
+            dailyTasks: {},
+            achievements: [],
+            lastStudyDate: null
+        };
+
+        let currentBook = '';
+
+        const achievements = [
+            { id: 'firstDay', icon: '🌟', title: 'Khởi đầu', desc: 'Hoàn thành ngày học đầu tiên', points: 50 },
+            { id: 'week1', icon: '🔥', title: 'Tuần đầu', desc: 'Học đều 7 ngày liên tiếp', points: 100 },
+            { id: 'grammar25', icon: '📝', title: 'Grammar Master I', desc: 'Hoàn thành 25% Grammar in Use', points: 75 },
+            { id: 'vocab25', icon: '📚', title: 'Vocabulary Builder I', desc: 'Hoàn thành 25% Vocabulary in Use', points: 75 },
+            { id: 'month1', icon: '📅', title: 'Bền bỉ', desc: 'Đạt 50 giờ học tổng cộng', points: 200 }
+        ];
+
+        // Daily tasks based on schedule
+        const dailyTasksByPhase = {
+            1: { // Giai đoạn 1: Nền tảng (Tháng 1-2)
+                weekday: {
+                    2: [ // Thứ 2
+                        { text: 'Grammar study (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
+                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                    ],
+                    3: [ // Thứ 3
+                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
+                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                    ],
+                    4: [ // Thứ 4
+                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
+                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                    ],
+                    5: [ // Thứ 5
+                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
+                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                    ],
+                    6: [ // Thứ 6
+                        { text: 'Grammar study (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
+                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                    ]
+                },
+                weekend: {
+                    6: [ // Thứ 7
+                        { text: 'Mini practice test or review (1h)', time: '1h', points: 20 },
+                        { text: 'Fun activity (movie, games, YouTube) (1h)', time: '1h', points: 10 }
+                    ],
+                    0: [ // Chủ nhật
+                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                    ]
+                }
+            },
+            2: { // Giai đoạn 2: Phát triển (Tháng 3-4)
+                weekday: {
+                    2: [
+                        { text: 'Grammar study (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary practice (30p)', time: '30p', points: 15 },
+                        { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
+                    ],
+                    3: [
+                        { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                    ],
+                    4: [
+                        { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                    ],
+                    5: [
+                        { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                    ],
+                    6: [
+                        { text: 'Grammar study (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary practice (30p)', time: '30p', points: 15 },
+                        { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
+                    ]
+                },
+                weekend: {
+                    6: [
+                        { text: 'Practice test (Reading + Listening) (1.5h)', time: '1.5h', points: 30 },
+                        { text: 'Review and fix mistakes (1h)', time: '1h', points: 15 },
+                        { text: 'Fun English activity (30p)', time: '30p', points: 10 }
+                    ],
+                    0: [
+                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                    ]
+                }
+            },
+            3: { // Giai đoạn 3: Tăng cường (Tháng 5-6)
+                weekday: {
+                    2: [
+                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
+                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
+                    ],
+                    3: [
+                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
+                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Podcast (15p)', time: '15p', points: 5 }
+                    ],
+                    4: [
+                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
+                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Podcast (15p)', time: '15p', points: 5 }
+                    ],
+                    5: [
+                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
+                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Podcast (15p)', time: '15p', points: 5 }
+                    ],
+                    6: [
+                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
+                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
+                    ]
+                },
+                weekend: {
+                    6: [
+                        { text: 'Full practice test (4 skills) (2h)', time: '2h', points: 40 },
+                        { text: 'Gaming session/voice chat (1h)', time: '1h', points: 15 }
+                    ],
+                    0: [
+                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                    ]
+                }
+            },
+            4: { // Giai đoạn 4: Hoàn thiện (Tháng 7-8)
+                weekday: {
+                    2: [
+                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
+                    ],
+                    3: [
+                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
+                    ],
+                    4: [
+                        { text: 'Grammar/Pronunciation fine-tuning (30p)', time: '30p', points: 15 },
+                        { text: 'Writing practice (2h)', time: '2h', points: 30 }
+                    ],
+                    5: [
+                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
+                    ],
+                    6: [
+                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
+                    ]
+                },
+                weekend: {
+                    6: [
+                        { text: 'Full IELTS practice test + review (2.5h)', time: '2.5h', points: 50 },
+                        { text: 'Relaxing English content (30p)', time: '30p', points: 10 }
+                    ],
+                    0: [
+                        { text: 'Nghỉ ngơi hoàn toàn (không bắt buộc)', time: '0', points: 0, optional: true }
+                    ]
+                }
+            }
+        };
+
+        function initApp() {
+            loadData();
+            updateDisplay();
+            generateDailyTasks();
+            updateStreak();
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('ieltsTrackerData');
+            if (savedData) {
+                data = { ...data, ...JSON.parse(savedData) };
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('ieltsTrackerData', JSON.stringify(data));
+        }
+
+        function updateDisplay() {
+            document.getElementById('totalPoints').textContent = data.totalPoints;
+            document.getElementById('studyStreak').textContent = data.studyStreak;
+            document.getElementById('totalHours').textContent = Math.floor(data.totalHours * 10) / 10;
+            
+            const bookProgress = Object.values(data.books).reduce((sum, book) => 
+                sum + (book.completed / book.total), 0) / Object.keys(data.books).length;
+            data.overallProgress = Math.min(100, Math.floor(bookProgress * 100));
+            
+            document.getElementById('overallProgress').style.width = data.overallProgress + '%';
+            document.querySelector('#overallProgress + .progress-text').textContent = data.overallProgress + '% hoàn thành';
+
+            Object.keys(data.books).forEach(book => {
+                const progress = (data.books[book].completed / data.books[book].total) * 100;
+                const progressEl = document.getElementById(book + 'Progress');
+                if (progressEl) {
+                    progressEl.style.width = Math.min(100, progress) + '%';
+                    const textEl = document.querySelector(`#${book}Progress + .progress-text`);
+                    if (textEl) {
+                        textEl.textContent = 
+                            `${data.books[book].completed}/${data.books[book].total} ${book.includes('Book') || ['listening', 'speaking', 'writing'].includes(book) ? 'lessons' : 'units'}`;
+                    }
+                }
+            });
+
+            updateAchievements();
+        }
+
+        function updateStreak() {
+            const today = new Date();
+            const todayStr = today.toDateString();
+            const yesterday = new Date(today - 24 * 60 * 60 * 1000).toDateString();
+            
+            if (data.lastStudyDate === todayStr) {
+                return;
+            } else if (data.lastStudyDate === yesterday || data.lastStudyDate === null) {
+                data.studyStreak++;
+            } else {
+                data.studyStreak = 1;
+            }
+            
+            data.lastStudyDate = todayStr;
+            saveData();
+        }
+
+        function generateDailyTasks() {
+            const today = new Date('2025-06-11'); // Set to current date: 11/6/2025
+            const dayOfWeek = today.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
+            const month = today.getMonth() + 1; // Tháng 1-12
+
+            // Xác định giai đoạn dựa trên ngày hiện tại (11/6/2025)
+            let phase = 1; // Mặc định Giai đoạn 1 (Tháng 1-2)
+            if (month >= 3 && month <= 4) phase = 2; // Giai đoạn 2 (Tháng 3-4)
+            else if (month >= 5 && month <= 6) phase = 3; // Giai đoạn 3 (Tháng 5-6)
+            else if (month >= 7 && month <= 8) phase = 4; // Giai đoạn 4 (Tháng 7-8)
+
+            let tasks = [];
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) { // T2-T6
+                tasks = dailyTasksByPhase[phase].weekday[dayOfWeek] || [];
+            } else if (dayOfWeek === 6) { // Thứ 7
+                tasks = dailyTasksByPhase[phase].weekend[6] || [];
+            } else if (dayOfWeek === 0) { // Chủ nhật
+                tasks = dailyTasksByPhase[phase].weekend[0] || [];
+            }
+
+            const todayKey = today.toDateString();
+            if (!data.dailyTasks[todayKey]) {
+                data.dailyTasks[todayKey] = tasks.map(() => false);
+            }
+
+            const container = document.getElementById('dailyTasks');
+            container.innerHTML = `
+                <div class="day-card">
+                    <div class="day-header">${dayOfWeek === 0 ? '🌅 Chủ nhật' : dayOfWeek === 6 ? '🌅 Thứ 7' : '📚 Ngày thường'}</div>
+                    ${tasks.map((task, index) => `
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="task${index}" 
+                                ${data.dailyTasks[todayKey][index] ? 'checked' : ''} 
+                                onchange="taskCompleted(${index}, ${task.points})"
+                                ${task.optional ? 'disabled' : ''}>
+                            <label for="task${index}" class="task-text ${data.dailyTasks[todayKey][index] ? 'completed' : ''}">${task.text}</label>
+                            <span class="task-time">${task.time} (+${task.points}pts)</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function taskCompleted(taskIndex, points) {
+            const checkbox = document.getElementById(`task${taskIndex}`);
+            const taskText = checkbox.nextElementSibling;
+            const todayKey = new Date('2025-06-11').toDateString();
+            
+            if (checkbox.checked && !checkbox.disabled) {
+                taskText.classList.add('completed');
+                data.totalPoints += points;
+                data.totalHours += parseFloat(checkbox.nextElementSibling.textContent.match(/\d+/)[0]) / 60 || 0;
+                data.dailyTasks[todayKey][taskIndex] = true;
+                updateStreak();
+                showNotification(`+${points} điểm! 🎉`);
+            } else if (!checkbox.checked) {
+                taskText.classList.remove('completed');
+                data.totalPoints = Math.max(0, data.totalPoints - points);
+                data.totalHours = Math.max(0, data.totalHours - (parseFloat(checkbox.nextElementSibling.textContent.match(/\d+/)[0]) / 60 || 0));
+                data.dailyTasks[todayKey][taskIndex] = false;
+            }
+            
+            saveData();
+            updateDisplay();
+            checkAchievements();
+        }
+
+        function updateAchievements() {
+            const container = document.getElementById('achievementsGrid');
+            container.innerHTML = achievements.map(achievement => {
+                const earned = data.achievements.includes(achievement.id);
+                return `
+                    <div class="achievement-card ${earned ? 'earned' : ''}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-title">${achievement.title}</div>
+                        <div class="achievement-desc">${achievement.desc}</div>
+                        <div style="margin-top: 10px; font-weight: bold;">+${achievement.points} pts</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function checkAchievements() {
+            achievements.forEach(achievement => {
+                if (!data.achievements.includes(achievement.id)) {
+                    let earned = false;
+                    
+                    switch(achievement.id) {
+                        case 'firstDay':
+                            earned = data.totalHours >= 1;
+                            break;
+                        case 'week1':
+                            earned = data.studyStreak >= 7;
+                            break;
+                        case 'grammar25':
+                            earned = data.books.grammar.completed >= data.books.grammar.total * 0.25;
+                            break;
+                        case 'vocab25':
+                            earned = data.books.vocab.completed >= data.books.vocab.total * 0.25;
+                            break;
+                        case 'month1':
+                            earned = data.totalHours >= 50;
+                            break;
+                    }
+                    
+                    if (earned) {
+                        data.achievements.push(achievement.id);
+                        data.totalPoints += achievement.points;
+                        showNotification(`🏆 Thành tựu mới: ${achievement.title}! +${achievement.points} pts`);
+                        saveData();
+                    }
+                }
+            });
+            
+            updateDisplay();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function updateBookProgress(bookType) {
+            currentBook = bookType;
+            const titleMap = {
+                'grammar': 'Grammar in Use',
+                'vocab': 'Vocabulary in Use', 
+                'pronun': 'Pronunciation in Use',
+                'readingBook': 'IELTS Reading A2+',
+                'listening': 'IELTS Listening A2+',
+                'speaking': 'IELTS Speaking A2+',
+                'writing': 'IELTS Writing A2+'
+            };
+            
+            document.getElementById('bookModalTitle').textContent = `📚 Cập nhật tiến độ - ${titleMap[bookType]}`;
+            document.getElementById('unitsCompleted').value = data.books[bookType].completed;
+            document.getElementById('unitsCompleted').max = data.books[bookType].total;
+            document.getElementById('bookModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('bookModal').style.display = 'none';
+        }
+
+        function saveBookProgress() {
+            const completed = parseInt(document.getElementById('unitsCompleted').value) || 0;
+            const maxUnits = data.books[currentBook].total;
+            
+            if (completed >= 0 && completed <= maxUnits) {
+                data.books[currentBook].completed = completed;
+                saveData();
+                updateDisplay();
+                checkAchievements();
+                closeModal();
+                showNotification(`📚 Đã cập nhật tiến độ sách!`);
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize app
+        initApp();
+    </script>
+</body>
+</html>
