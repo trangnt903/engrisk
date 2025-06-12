@@ -518,7 +518,7 @@
 
         // Daily tasks based on schedule
         const dailyTasksByPhase = {
-            1: { // Giai đoạn 1: Nền tảng (Tháng 1-2)
+            1: { // Giai đoạn 1: Nền tảng (Tháng 1-2, nhưng bắt đầu từ 6/2025)
                 weekday: {
                     2: [ // Thứ 2
                         { text: 'Grammar study (20p)', time: '20p', points: 10 },
@@ -603,9 +603,10 @@
                         { text: 'Podcast (15p)', time: '15p', points: 5 }
                     ],
                     4: [
-                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
-                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
-                        { text: 'Podcast (15p)', time: '15p', points: 5 }
+                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
+                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
                     ],
                     5: [
                         { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
@@ -715,7 +716,7 @@
         }
 
         function updateStreak() {
-            const today = new Date();
+            const today = new Date('2025-06-12');
             const todayStr = today.toDateString();
             const yesterday = new Date(today - 24 * 60 * 60 * 1000).toDateString();
             
@@ -732,15 +733,12 @@
         }
 
         function generateDailyTasks() {
-            const today = new Date('2025-06-11'); // Set to current date: 11/6/2025
+            const today = new Date('2025-06-12'); // Set to current date: 12/6/2025 (Thursday)
             const dayOfWeek = today.getDay(); // 0 = Chủ nhật, 1 = Thứ 2, ..., 6 = Thứ 7
             const month = today.getMonth() + 1; // Tháng 1-12
 
-            // Xác định giai đoạn dựa trên ngày hiện tại (11/6/2025)
-            let phase = 1; // Mặc định Giai đoạn 1 (Tháng 1-2)
-            if (month >= 3 && month <= 4) phase = 2; // Giai đoạn 2 (Tháng 3-4)
-            else if (month >= 5 && month <= 6) phase = 3; // Giai đoạn 3 (Tháng 5-6)
-            else if (month >= 7 && month <= 8) phase = 4; // Giai đoạn 4 (Tháng 7-8)
+            // Xác định giai đoạn là 1 vì bạn bắt đầu từ tháng 6/2025
+            let phase = 1;
 
             let tasks = [];
             if (dayOfWeek >= 1 && dayOfWeek <= 5) { // T2-T6
@@ -777,7 +775,7 @@
         function taskCompleted(taskIndex, points) {
             const checkbox = document.getElementById(`task${taskIndex}`);
             const taskText = checkbox.nextElementSibling;
-            const todayKey = new Date('2025-06-11').toDateString();
+            const todayKey = new Date('2025-06-12').toDateString();
             
             if (checkbox.checked && !checkbox.disabled) {
                 taskText.classList.add('completed');
