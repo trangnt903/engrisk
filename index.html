@@ -410,7 +410,7 @@
                 <div class="stat-label">Tổng giờ học</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="daysLeft">180</div>
+                <div class="stat-number" id="daysLeft">233</div>
                 <div class="stat-label">Ngày còn lại</div>
             </div>
         </div>
@@ -744,6 +744,13 @@
             document.getElementById('studyStreak').textContent = data.studyStreak;
             document.getElementById('totalHours').textContent = Math.floor(data.totalHours * 10) / 10;
             
+            // Tính số ngày còn lại từ ngày hiện tại đến 31/1/2026
+            const today = new Date();
+            const endDate = new Date('2026-01-31');
+            const timeDiff = endDate - today;
+            const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            document.getElementById('daysLeft').textContent = daysLeft > 0 ? daysLeft : 0;
+
             const bookProgress = Object.values(data.books).reduce((sum, book) => 
                 sum + (book.completed / book.total), 0) / Object.keys(data.books).length;
             data.overallProgress = Math.min(100, Math.floor(bookProgress * 100));
