@@ -564,7 +564,7 @@
         ];
 
         const dailyTasksByPhase = {
-            1: { // Giai đoạn 1: Nền tảng
+            1: { // Giai đoạn 1: Tháng 6/2025 - Tháng 7/2025
                 weekday: {
                     1: [
                         { text: 'Grammar (20p)', time: '20p', points: 10 },
@@ -600,7 +600,7 @@
                     ]
                 }
             },
-            2: { // Giai đoạn 2: Phát triển
+            2: { // Giai đoạn 2: Tháng 8/2025 - Tháng 9/2025
                 weekday: {
                     1: [
                         { text: 'Grammar (30p)', time: '30p', points: 15 },
@@ -637,7 +637,7 @@
                     ]
                 }
             },
-            3: { // Giai đoạn 3: Tăng cường
+            3: { // Giai đoạn 3: Tháng 10/2025 - Tháng 11/2025
                 weekday: {
                     1: [
                         { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
@@ -662,9 +662,10 @@
                         { text: 'Podcast (15p)', time: '15p', points: 5 }
                     ],
                     5: [
-                        { text: 'Grammar (20p)', time: '20p', points: 10 },
-                        { text: 'Vocabulary (20p)', time: '20p', points: 10 },
-                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
+                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
                     ],
                     6: [
                         { text: 'Full practice test (4 skills) (2h)', time: '2h', points: 40 },
@@ -677,7 +678,7 @@
                     ]
                 }
             },
-            4: { // Giai đoạn 4: Hoàn thiện
+            4: { // Giai đoạn 4: Tháng 12/2025 - Tháng 1/2026
                 weekday: {
                     1: [
                         { text: 'IELTS practice (1h luân phiên 4 skills)', time: '1h', points: 25 },
@@ -786,10 +787,19 @@
         function generateDailyTasks() {
             const today = new Date();
             const dayOfWeek = today.getDay();
+            const currentMonth = today.getMonth() + 1; // getMonth() trả về 0-11, cộng 1 để thành 1-12
             let phase = 1;
 
-            // Giai đoạn 1 được áp dụng theo yêu cầu của bạn cho hôm nay
-            // (thay vì tự động dựa trên tháng, vì bạn muốn Giai đoạn 1 cho thứ Sáu)
+            // Xác định giai đoạn dựa trên tháng
+            if (currentMonth >= 6 && currentMonth <= 7) {
+                phase = 1; // Giai đoạn 1: Tháng 6-7/2025
+            } else if (currentMonth >= 8 && currentMonth <= 9) {
+                phase = 2; // Giai đoạn 2: Tháng 8-9/2025
+            } else if (currentMonth >= 10 && currentMonth <= 11) {
+                phase = 3; // Giai đoạn 3: Tháng 10-11/2025
+            } else if (currentMonth >= 12 || currentMonth === 1) {
+                phase = 4; // Giai đoạn 4: Tháng 12/2025 - Tháng 1/2026
+            }
 
             let tasks = [];
             if (dayOfWeek >= 1 && dayOfWeek <= 6) {
