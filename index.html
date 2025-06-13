@@ -110,7 +110,7 @@
             transform: translate(-50%, -50%);
             color: #333;
             font-weight: bold;
-            font-size: 0.8em;
+            font-size: 0.9em;
         }
 
         .daily-tracker {
@@ -566,150 +566,154 @@
         const dailyTasksByPhase = {
             1: { // Giai đoạn 1: Nền tảng
                 weekday: {
-                    2: [
-                        { text: 'Grammar study (20p)', time: '20p', points: 10 },
-                        { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
+                    1: [
+                        { text: 'Grammar (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary (20p)', time: '20p', points: 10 },
                         { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                    ],
+                    2: [
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Xem phim có phụ đề (30p)', time: '30p', points: 5 }
                     ],
                     3: [
-                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
-                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                        { text: 'Grammar (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary (20p)', time: '20p', points: 10 },
+                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
                     ],
                     4: [
-                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
-                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Xem phim có phụ đề (30p)', time: '30p', points: 5 }
                     ],
                     5: [
-                        { text: 'Pronunciation study (30p)', time: '30p', points: 15 },
-                        { text: 'Watch movie with subtitles (30p)', time: '30p', points: 5 }
+                        { text: 'Grammar (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary (20p)', time: '20p', points: 10 },
+                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
                     ],
                     6: [
-                        { text: 'Grammar study (20p)', time: '20p', points: 10 },
-                        { text: 'Vocabulary practice (20p)', time: '20p', points: 10 },
-                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                        { text: 'Practice test mini hoặc ôn tập tuần', time: '1h', points: 20 },
+                        { text: 'Hoạt động thú vị (phim không phụ đề, games, YouTube)', time: '1h', points: 10 }
                     ]
                 },
                 weekend: {
-                    6: [
-                        { text: 'Mini practice test or review (1h)', time: '1h', points: 20 },
-                        { text: 'Fun activity (movie, games, YouTube) (1h)', time: '1h', points: 10 }
-                    ],
                     0: [
-                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                        { text: 'Review vocabulary (30p)', time: '30p', points: 5, optional: true }
                     ]
                 }
             },
             2: { // Giai đoạn 2: Phát triển
                 weekday: {
-                    2: [
-                        { text: 'Grammar study (30p)', time: '30p', points: 15 },
-                        { text: 'Vocabulary practice (30p)', time: '30p', points: 15 },
+                    1: [
+                        { text: 'Grammar (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 },
                         { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
                     ],
-                    3: [
+                    2: [
                         { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
-                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                        { text: 'Xem phim không phụ đề (45p)', time: '45p', points: 10 }
+                    ],
+                    3: [
+                        { text: 'Grammar (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 },
+                        { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
                     ],
                     4: [
                         { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
-                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                        { text: 'Xem phim không phụ đề (45p)', time: '45p', points: 10 }
                     ],
                     5: [
-                        { text: 'IELTS Listening (45p)', time: '45p', points: 20 },
-                        { text: 'Watch movie without subtitles (45p)', time: '45p', points: 10 }
+                        { text: 'Grammar (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 },
+                        { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
                     ],
                     6: [
-                        { text: 'Grammar study (30p)', time: '30p', points: 15 },
-                        { text: 'Vocabulary practice (30p)', time: '30p', points: 15 },
-                        { text: 'IELTS Reading (30p)', time: '30p', points: 15 }
+                        { text: 'Practice test (Reading + Listening) (1.5h)', time: '1.5h', points: 30 },
+                        { text: 'Review và sửa lỗi (1h)', time: '1h', points: 15 },
+                        { text: 'Hoạt động thú vị bằng tiếng Anh (30p)', time: '30p', points: 10 }
                     ]
                 },
                 weekend: {
-                    6: [
-                        { text: 'Practice test (Reading + Listening) (1.5h)', time: '1.5h', points: 30 },
-                        { text: 'Review and fix mistakes (1h)', time: '1h', points: 15 },
-                        { text: 'Fun English activity (30p)', time: '30p', points: 10 }
-                    ],
                     0: [
-                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                        { text: 'Review vocabulary (30p)', time: '30p', points: 5, optional: true }
                     ]
                 }
             },
             3: { // Giai đoạn 3: Tăng cường
                 weekday: {
-                    2: [
+                    1: [
                         { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
                         { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
                         { text: 'Pronunciation (30p)', time: '30p', points: 15 },
                         { text: 'Vocabulary (15p)', time: '15p', points: 10 }
+                    ],
+                    2: [
+                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
+                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
+                        { text: 'Podcast (15p)', time: '15p', points: 5 }
                     ],
                     3: [
-                        { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
-                        { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
-                        { text: 'Podcast (15p)', time: '15p', points: 5 }
+                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
+                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
+                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
+                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
                     ],
                     4: [
-                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
-                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
-                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
-                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
-                    ],
-                    5: [
                         { text: 'IELTS Speaking practice (1h)', time: '1h', points: 25 },
                         { text: 'IELTS Reading/Listening (45p)', time: '45p', points: 20 },
                         { text: 'Podcast (15p)', time: '15p', points: 5 }
                     ],
+                    5: [
+                        { text: 'Grammar (20p)', time: '20p', points: 10 },
+                        { text: 'Vocabulary (20p)', time: '20p', points: 10 },
+                        { text: 'Games/Apps (20p)', time: '20p', points: 5 }
+                    ],
                     6: [
-                        { text: 'IELTS Writing (45p)', time: '45p', points: 20 },
-                        { text: 'Grammar advanced (30p)', time: '30p', points: 15 },
-                        { text: 'Pronunciation (30p)', time: '30p', points: 15 },
-                        { text: 'Vocabulary (15p)', time: '15p', points: 10 }
+                        { text: 'Full practice test (4 skills) (2h)', time: '2h', points: 40 },
+                        { text: 'Gaming session/voice chat tiếng Anh (1h)', time: '1h', points: 15 }
                     ]
                 },
                 weekend: {
-                    6: [
-                        { text: 'Full practice test (4 skills) (2h)', time: '2h', points: 40 },
-                        { text: 'Gaming session/voice chat (1h)', time: '1h', points: 15 }
-                    ],
                     0: [
-                        { text: 'Review vocabulary (30p, tùy chọn)', time: '30p', points: 5, optional: true }
+                        { text: 'Review vocabulary (30p)', time: '30p', points: 5, optional: true }
                     ]
                 }
             },
             4: { // Giai đoạn 4: Hoàn thiện
                 weekday: {
+                    1: [
+                        { text: 'IELTS practice (1h luân phiên 4 skills)', time: '1h', points: 25 },
+                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
+                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
+                    ],
                     2: [
-                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                        { text: 'IELTS practice (1h luân phiên 4 skills)', time: '1h', points: 25 },
                         { text: 'Authentic materials (1h)', time: '1h', points: 20 },
                         { text: 'Vocabulary (30p)', time: '30p', points: 15 }
                     ],
                     3: [
-                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
-                        { text: 'Authentic materials (1h)', time: '1h', points: 20 },
-                        { text: 'Vocabulary (30p)', time: '30p', points: 15 }
-                    ],
-                    4: [
                         { text: 'Grammar/Pronunciation fine-tuning (30p)', time: '30p', points: 15 },
                         { text: 'Writing practice (2h)', time: '2h', points: 30 }
                     ],
-                    5: [
-                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                    4: [
+                        { text: 'IELTS practice (1h luân phiên 4 skills)', time: '1h', points: 25 },
                         { text: 'Authentic materials (1h)', time: '1h', points: 20 },
                         { text: 'Vocabulary (30p)', time: '30p', points: 15 }
                     ],
-                    6: [
-                        { text: 'IELTS practice (1h)', time: '1h', points: 25 },
+                    5: [
+                        { text: 'IELTS practice (1h luân phiên 4 skills)', time: '1h', points: 25 },
                         { text: 'Authentic materials (1h)', time: '1h', points: 20 },
                         { text: 'Vocabulary (30p)', time: '30p', points: 15 }
-                    ]
-                },
-                weekend: {
+                    ],
                     6: [
                         { text: 'Full IELTS practice test + review (2.5h)', time: '2.5h', points: 50 },
                         { text: 'Relaxing English content (30p)', time: '30p', points: 10 }
-                    ],
+                    ]
+                },
+                weekend: {
                     0: [
-                        { text: 'Nghỉ ngơi hoàn toàn (không bắt buộc)', time: '0', points: 0, optional: true }
+                        { text: 'Ôn lại vocabulary đã học', time: '1h', points: 10 },
+                        { text: 'Làm quiz/test nhỏ', time: '1h', points: 10 },
+                        { text: 'Đánh giá điểm mạnh/yếu', time: '30p', points: 5 },
+                        { text: 'Điều chỉnh kế hoạch tuần sau', time: '30p', points: 5 }
                     ]
                 }
             }
@@ -763,7 +767,7 @@
         }
 
         function updateStreak() {
-            const today = new Date('2025-06-12');
+            const today = new Date();
             const todayStr = today.toDateString();
             const yesterday = new Date(today - 24 * 60 * 60 * 1000).toDateString();
             
@@ -780,15 +784,16 @@
         }
 
         function generateDailyTasks() {
-            const today = new Date('2025-06-12');
+            const today = new Date();
             const dayOfWeek = today.getDay();
             let phase = 1;
 
+            // Giai đoạn 1 được áp dụng theo yêu cầu của bạn cho hôm nay
+            // (thay vì tự động dựa trên tháng, vì bạn muốn Giai đoạn 1 cho thứ Sáu)
+
             let tasks = [];
-            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            if (dayOfWeek >= 1 && dayOfWeek <= 6) {
                 tasks = dailyTasksByPhase[phase].weekday[dayOfWeek] || [];
-            } else if (dayOfWeek === 6) {
-                tasks = dailyTasksByPhase[phase].weekend[6] || [];
             } else if (dayOfWeek === 0) {
                 tasks = dailyTasksByPhase[phase].weekend[0] || [];
             }
@@ -819,7 +824,8 @@
         function taskCompleted(taskIndex, points) {
             const checkbox = document.getElementById(`task${taskIndex}`);
             const taskText = checkbox.nextElementSibling;
-            const todayKey = new Date('2025-06-12').toDateString();
+            const today = new Date();
+            const todayKey = today.toDateString();
             
             if (checkbox.checked && !checkbox.disabled) {
                 taskText.classList.add('completed');
@@ -962,7 +968,7 @@
         function showRandomNote() {
             const randomNoteContent = document.getElementById('randomNoteContent');
             if (data.notes.length > 0) {
-                const today = new Date('2025-06-12').toDateString();
+                const today = new Date().toDateString();
                 let randomIndex;
                 if (!localStorage.getItem('lastRandomNoteDate') || localStorage.getItem('lastRandomNoteDate') !== today) {
                     randomIndex = Math.floor(Math.random() * data.notes.length);
