@@ -997,15 +997,7 @@
         function showRandomNote() {
             const randomNoteContent = document.getElementById('randomNoteContent');
             if (data.notes.length > 0) {
-                const today = new Date().toDateString();
-                let randomIndex;
-                if (!localStorage.getItem('lastRandomNoteDate') || localStorage.getItem('lastRandomNoteDate') !== today) {
-                    randomIndex = Math.floor(Math.random() * data.notes.length);
-                    localStorage.setItem('lastRandomNoteDate', today);
-                    localStorage.setItem('lastRandomNoteIndex', randomIndex);
-                } else {
-                    randomIndex = parseInt(localStorage.getItem('lastRandomNoteIndex'));
-                }
+                const randomIndex = Math.floor(Math.random() * data.notes.length);
                 randomNoteContent.textContent = data.notes[randomIndex];
             } else {
                 randomNoteContent.textContent = 'Chưa có ghi chú nào. Hãy thêm ghi chú để xem!';
