@@ -844,6 +844,7 @@
         function taskCompleted(taskIndex, points) {
             const checkbox = document.getElementById(`task${taskIndex}`);
             const taskText = checkbox.nextElementSibling;
+            const taskTimeElement = taskText.nextElementSibling;
             const today = new Date();
             const todayKey = today.toDateString();
             
@@ -854,23 +855,38 @@
             if (checkbox.checked && !checkbox.disabled) {
                 taskText.classList.add('completed');
                 data.totalPoints += points;
-                // Tính giờ từ task.time thay vì match chuỗi
-                const timeMatch = taskText.nextElementSibling.textContent.match(/\d+(?:\.\d+)?/); // Lấy số, hỗ trợ cả số thập phân
-                const hours = timeMatch ? parseFloat(timeMatch[0]) / 60 : 0; // Chuyển phút sang giờ
+
+                // Tính giờ từ task.time
+                const timeStr = taskTimeElement.textContent.match(/\d+(?:\.\d+)?[hmp]/i)[0]; // Lấy phần số và đơn vị (h, m, p)
+                let hours = 0;
+                if (timeStr.includes('h')) {
+                    hours = parseFloat(timeStr.replace('h', ''));
+                } else if (timeStr.includes('p') || timeStr.includes('m')) {
+                    hours = parseFloat(timeStr.replace(/[pm]/i, '')) / 60; // Chuyển phút sang giờ
+                }
                 data.totalHours += hours;
+
                 data.dailyTasks[todayKey][taskIndex] = true;
                 updateStreak();
                 showNotification(`+${points} điểm! 🎉`);
             } else if (!checkbox.checked) {
                 taskText.classList.remove('completed');
                 data.totalPoints = Math.max(0, data.totalPoints - points);
-                const timeMatch = taskText.nextElementSibling.textContent.match(/\d+(?:\.\d+)?/);
-                const hours = timeMatch ? parseFloat(timeMatch[0]) / 60 : 0;
+
+                // Trừ giờ khi bỏ tick
+                const timeStr = taskTimeElement.textContent.match(/\d+(?:\.\d+)?[hmp]/i)[0];
+                let hours = 0;
+                if (timeStr.includes('h')) {
+                    hours = parseFloat(timeStr.replace('h', ''));
+                } else if (timeStr.includes('p') || timeStr.includes('m')) {
+                    hours = parseFloat(timeStr.replace(/[pm]/i, '')) / 60;
+                }
                 data.totalHours = Math.max(0, data.totalHours - hours);
+
                 data.dailyTasks[todayKey][taskIndex] = false;
             }
             
-            saveData(); // Đảm bảo lưu dữ liệu ngay sau khi thay đổi
+            saveData();
             updateDisplay();
             checkAchievements();
         }
