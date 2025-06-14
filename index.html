@@ -847,17 +847,26 @@
             const today = new Date();
             const todayKey = today.toDateString();
             
+            if (!data.dailyTasks[todayKey] || !Array.isArray(data.dailyTasks[todayKey])) {
+                data.dailyTasks[todayKey] = [];
+            }
+
             if (checkbox.checked && !checkbox.disabled) {
                 taskText.classList.add('completed');
                 data.totalPoints += points;
-                data.totalHours += parseFloat(checkbox.nextElementSibling.textContent.match(/\d+/)[0]) / 60 || 0;
+                // Tính giờ từ task.time thay vì match chuỗi
+                const timeMatch = taskText.nextElementSibling.textContent.match(/\d+(?:\.\d+)?/); // Lấy số, hỗ trợ cả số thập phân
+                const hours = timeMatch ? parseFloat(timeMatch[0]) / 60 : 0; // Chuyển phút sang giờ
+                data.totalHours += hours;
                 data.dailyTasks[todayKey][taskIndex] = true;
                 updateStreak();
                 showNotification(`+${points} điểm! 🎉`);
             } else if (!checkbox.checked) {
                 taskText.classList.remove('completed');
                 data.totalPoints = Math.max(0, data.totalPoints - points);
-                data.totalHours = Math.max(0, data.totalHours - (parseFloat(checkbox.nextElementSibling.textContent.match(/\d+/)[0]) / 60 || 0));
+                const timeMatch = taskText.nextElementSibling.textContent.match(/\d+(?:\.\d+)?/);
+                const hours = timeMatch ? parseFloat(timeMatch[0]) / 60 : 0;
+                data.totalHours = Math.max(0, data.totalHours - hours);
                 data.dailyTasks[todayKey][taskIndex] = false;
             }
             
