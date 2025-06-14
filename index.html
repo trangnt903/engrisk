@@ -410,7 +410,7 @@
                 <div class="stat-label">Tổng giờ học</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="daysLeft">233</div>
+                <div class="stat-number" id="daysLeft">232</div>
                 <div class="stat-label">Ngày còn lại</div>
             </div>
         </div>
@@ -732,6 +732,9 @@
             const savedData = localStorage.getItem('ieltsTrackerData');
             if (savedData) {
                 data = { ...data, ...JSON.parse(savedData) };
+            } else {
+                // Khởi tạo dữ liệu mặc định nếu chưa có
+                data.dailyTasks = {};
             }
         }
 
@@ -858,7 +861,7 @@
                 data.dailyTasks[todayKey][taskIndex] = false;
             }
             
-            saveData();
+            saveData(); // Đảm bảo lưu dữ liệu ngay sau khi thay đổi
             updateDisplay();
             checkAchievements();
         }
