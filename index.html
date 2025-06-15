@@ -724,7 +724,7 @@
             loadData();
             updateDisplay();
             generateDailyTasks();
-            updateStreak();
+            updateStreak(); // Kiểm tra streak ngay khi khởi động
             showRandomNote();
         }
 
@@ -782,15 +782,17 @@
             const todayStr = today.toDateString();
             const yesterday = new Date(today - 24 * 60 * 60 * 1000).toDateString();
             
-            if (data.lastStudyDate === todayStr) {
-                return;
-            } else if (data.lastStudyDate === yesterday || data.lastStudyDate === null) {
-                data.studyStreak++;
-            } else {
-                data.studyStreak = 1;
+            if (data.lastStudyDate === null) {
+                data.studyStreak = 1; // Bắt đầu streak nếu chưa có ngày học nào
+            } else if (data.lastStudyDate !== todayStr) {
+                if (data.lastStudyDate === yesterday) {
+                    data.studyStreak++; // Tăng streak nếu học hôm qua
+                } else {
+                    data.studyStreak = 1; // Reset streak nếu bỏ lỡ ngày
+                }
             }
             
-            data.lastStudyDate = todayStr;
+            data.lastStudyDate = todayStr; // Cập nhật ngày học mới
             saveData();
         }
 
@@ -866,7 +868,7 @@
                 data.totalHours += hours;
 
                 data.dailyTasks[todayKey][taskIndex] = true;
-                updateStreak();
+                updateStreak(); // Cập nhật streak khi hoàn thành nhiệm vụ
                 showNotification(`+${points} điểm! 🎉`);
             } else {
                 taskText.classList.remove('completed');
